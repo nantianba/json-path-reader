@@ -62,6 +62,7 @@
     </dependencies>
 
     <build>
+        <finalName>json-path-reader</finalName>
         <plugins>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
