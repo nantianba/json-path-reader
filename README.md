@@ -1,7 +1,7 @@
 # json-path-reader
 A tool to read a json by the field's path
 * When we meet a huge json string but we are only interested in a little part ,we can use a path to extract the part we need
-* the path can be defined by a string,like 'a.b[0][*]','a' and 'b' represent the field's names,separated by the '.' ,the [number] represents the index of json array,[*]represents all the element of a json array
+* the path can be defined by a string,like 'a.b\[0]\[*]','a' and 'b' represent the field's names,separated by the '.' ,the \[number] represents the index of json array,\[*]represents all the element of a json array
 * This tool is built on GSON ,and can read the JsonElement from the target JsonElement
 ```java
  public void testFindElement() throws JsonPathParseException {
