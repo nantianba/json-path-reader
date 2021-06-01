@@ -6,4 +6,6 @@ public interface Layer {
     JsonElement read(JsonElement element);
 
     String description();
+
+    boolean isWildCard();
 }

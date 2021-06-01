@@ -4,4 +4,5 @@ class Output {
     int index;
     String field;
     boolean isIndex;
+    boolean isWildCard;
 }

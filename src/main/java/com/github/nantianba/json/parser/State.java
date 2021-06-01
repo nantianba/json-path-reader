@@ -5,7 +5,7 @@ import com.github.nantianba.json.JsonPathParseException;
 interface State {
     boolean canEnd();
 
-    boolean isEnd();
+    boolean hasEnd();
 
     Output output();
 

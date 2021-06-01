@@ -2,13 +2,12 @@ package com.github.nantianba.json.parser;
 
 import com.github.nantianba.json.JsonPathParseException;
 import com.github.nantianba.json.Path;
-import com.github.nantianba.json.layer.PathBuilder;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class PathParser {
     public Path parse(String path) throws JsonPathParseException {
-        final PathBuilder pathBuilder = PathBuilder.builder();
+        final Path.PathBuilder pathBuilder = Path.PathBuilder.builder();
 
         final char[] chars = path.toCharArray();
 
@@ -23,7 +22,7 @@ public class PathParser {
 
             state.process(c, i);
 
-            if (state.isEnd()) {
+            if (state.hasEnd()) {
                 processOutPut(pathBuilder, state);
             }
 
@@ -39,12 +38,14 @@ public class PathParser {
         return pathBuilder.build();
     }
 
-    private void processOutPut(PathBuilder pathBuilder, State state) {
+    private void processOutPut(Path.PathBuilder pathBuilder, State state) throws JsonPathParseException {
         final Output output = state.output();
 
         if (output != null) {
             if (output.isIndex) {
                 pathBuilder.append(output.index);
+            } else if (output.isWildCard) {
+                pathBuilder.appendWildCard();
             } else {
                 pathBuilder.append(output.field);
             }

@@ -18,4 +18,9 @@ public class Field implements Layer {
     public String description() {
         return "." + name;
     }
+
+    @Override
+    public boolean isWildCard() {
+        return false;
+    }
 }

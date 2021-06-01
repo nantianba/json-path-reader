@@ -2,33 +2,38 @@ package com.github.nantianba.json.parser;
 
 import com.github.nantianba.json.JsonPathParseException;
 
-class NextLayer implements State {
+/**
+ * read a '*' and wait for ']'
+ */
+public class WildCardRead implements State {
     private State nextState;
+    private boolean readParentheses;
 
     @Override
     public boolean canEnd() {
-        return true;
+        return readParentheses;
     }
 
     @Override
     public boolean hasEnd() {
-        return false;
+        return readParentheses;
     }
 
     @Override
     public Output output() {
-        return null;
+        if (!hasEnd()) {
+            return null;
+        }
+        final Output output = new Output();
+        output.isWildCard = true;
+        return output;
     }
 
     @Override
     public void process(char c, int index) throws JsonPathParseException {
-        if (c == '[') {
-            nextState = new ReadingIndex();
-        } else if (Character.isLetter(c) || c == '_') {
-            nextState = new ReadingField();
-            nextState.process(c, index);
-        } else if (c == '.') {
-            nextState = new ReadingField();
+        if (c == ']') {
+            readParentheses = true;
+            nextState = new NextLayer();
         } else {
             throw new JsonPathParseException("unexcepted char in index " + index + ":" + c);
         }

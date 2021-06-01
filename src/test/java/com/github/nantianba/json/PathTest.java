@@ -1,18 +1,18 @@
 package com.github.nantianba.json;
 
-import com.github.nantianba.json.layer.PathBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import junit.framework.TestCase;
 
 public class PathTest extends TestCase {
 
-    public void testParse() {
-        final Path path = PathBuilder.builder()
+    public void testParse() throws JsonPathParseException {
+        final Path path = Path.PathBuilder.builder()
                 .append(0)
                 .append("layer1")
                 .append("layer2")
                 .append("layer3")
+                .appendWildCard()
                 .build();
 
         System.out.println("path = " + path);
@@ -27,6 +27,8 @@ public class PathTest extends TestCase {
         System.out.println("Path.parse(\"[0].l1\") = " + Path.parse("[0].l1"));
         System.out.println("Path.parse(\"a.b.c\") = " + Path.parse("a.b.c"));
         System.out.println("Path.parse(\"_3 \") = " + Path.parse("_3 "));
+        System.out.println("Path.parse(\"[*].l[0]\") = " + Path.parse("[*].l[0]"));
+        System.out.println("Path.parse(\"[0][0].l[*]\") = " + Path.parse("[0][0].l[*]"));
 
         String[] errors = {
                 "2",
@@ -36,7 +38,9 @@ public class PathTest extends TestCase {
                 "5]",
                 "5&",
                 "2_d.df",
-                "sd.54"
+                "sd.54",
+                "[*].l[*]",
+                "[0].l[*",
         };
 
         for (String error : errors) {
@@ -50,19 +54,26 @@ public class PathTest extends TestCase {
 
     public void testFindElement() throws JsonPathParseException {
         A a = new A();
-        a.arr = new A1[1];
+        a.arr = new A1[2];
 
-        a.arr[0] = new A1();
-        a.arr[0].nums = new int[3];
-        for (int i = 0; i < a.arr[0].nums.length; i++) {
-            a.arr[0].nums[i] = i;
+        for (int i = 0; i < 2; i++) {
+
+            a.arr[i] = new A1();
+            a.arr[i].nums = new int[3];
+            for (int j = 0; j < a.arr[i].nums.length; j++) {
+                a.arr[i].nums[j] = j;
+            }
         }
 
         final JsonElement tree = new Gson().toJsonTree(a);
 
         System.out.println("tree = " + tree);
 
-        final int i = Path.parse("arr[0].nums[2]").read(tree).getAsInt();
+        final JsonElement elements = Path.parse("arr[*].nums[1]").read(tree);
+
+        System.out.println("elements = " + elements);
+
+        final int i= Path.parse("arr[1].nums[1]").read(tree).getAsInt();
 
         System.out.println("i = " + i);
     }

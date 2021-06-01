@@ -16,7 +16,7 @@ class ReadingIndex implements State {
     }
 
     @Override
-    public boolean isEnd() {
+    public boolean hasEnd() {
         return isEnd;
     }
 
@@ -36,7 +36,7 @@ class ReadingIndex implements State {
         int ans = 0;
         final Iterator<Character> iterator = cache.descendingIterator();
 
-        while (!iterator.hasNext()) {
+        while (iterator.hasNext()) {
             ans *= 10;
             ans += iterator.next() - '0';
         }
@@ -48,7 +48,13 @@ class ReadingIndex implements State {
         if (Character.isDigit(c)) {
             cache.add(c);
             nextState = this;
-        } else if (c == ']') {
+        }else if(c=='*'){
+            if (!cache.isEmpty()) {
+                throw new JsonPathParseException("unexcepted char in index " + index + ":" + c);
+            }
+            nextState=new WildCardRead();
+        }
+        else if (c == ']') {
             isEnd = true;
             nextState = new NextLayer();
         } else {

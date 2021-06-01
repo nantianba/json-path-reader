@@ -15,7 +15,7 @@ class ReadingField implements State {
     }
 
     @Override
-    public boolean isEnd() {
+    public boolean hasEnd() {
         return isEnd;
     }
 
