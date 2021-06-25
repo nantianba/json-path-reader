@@ -1,5 +1,6 @@
 package com.github.nantianba.json.layer;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 public class Array implements Layer {
@@ -11,7 +12,12 @@ public class Array implements Layer {
 
     @Override
     public JsonElement read(JsonElement element) {
-        return element.getAsJsonArray().get(index);
+        final JsonArray array = element.getAsJsonArray();
+
+        if (array.size() <= index) {
+            return null;
+        }
+        return array.get(index);
     }
 
     @Override
