@@ -51,7 +51,7 @@ public class Path {
 
         return isArray
                 ? elements.stream().collect(JsonArray::new, JsonArray::add, JsonArray::addAll)
-                : elements.get(0);
+                : elements.isEmpty() ? null : elements.get(0);
     }
 
 
