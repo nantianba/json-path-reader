@@ -5,6 +5,9 @@ import com.google.gson.JsonElement;
 public class ArrayAll implements Layer {
     @Override
     public JsonElement read(JsonElement element) {
+        if (element.isJsonNull()|| !element.isJsonArray()) {
+            return null;
+        }
         return element.getAsJsonArray();
     }
 

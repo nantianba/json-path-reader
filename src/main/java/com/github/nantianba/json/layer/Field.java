@@ -11,7 +11,7 @@ public class Field implements Layer {
 
     @Override
     public JsonElement read(JsonElement element) {
-        if (element.isJsonNull()) {
+        if (element.isJsonNull() || !element.isJsonObject()) {
             return null;
         }
         return element.getAsJsonObject().get(name);
